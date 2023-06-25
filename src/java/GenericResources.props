@@ -1,0 +1,7 @@
+DefaultProvider = Asterisk
+PROVIDER_Asterisk = com.headissue.asterisk.jtapi.gjtapi.AsteriskProvider
+PROVIDER_Emulator = net.sourceforge.gjtapi.raw.emulator.EmProvider
+
+# should the MediaService disconnect the Connection on a Terminal when the MediaService
+# is released? "t" enforces JTAPI specifications
+mediaReleaseDisconnect = t

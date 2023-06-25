@@ -1,0 +1,26 @@
+
+- null at xref output footer
+- activate maven ChangeLog plugin?
+
+Documentation
+- eventmonitor example output
+- links and description to the examples, etc.
+
+Implementation
+- Think of calling address: We need to get a rewritten
+  address which works within the number space of the PBX
+  instead of the trunk dialplan, did we?!
+- Blocking Operations on manage interface:
+  Pool for manager connections!!
+- outgoing calls that a not originated through us, will
+  not be signalled
+  
+Add-Ons, Examples:
+- make Protocol Example more mature, with events etc.
+- put output of eventmonitor and protocol example on log4j/
+  use it as a more sophisticated CDR logger
+- example servlet
+  
+  
+    
+  

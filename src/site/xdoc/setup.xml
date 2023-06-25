@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!--
+/*
+ *  (C) Copyright 2005-2006 headissue GmbH; Jens Wilke
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+-->
+<document>
+	<properties>
+		<author>Jens Wilke</author>
+		<title>Asterisk-JTAPI Setup</title>
+	</properties>
+	<meta name="keywords" content="Asterisk-JTAPI, setup, configuration"/>
+	<body>
+	
+		<section name="Asterisk-JTAPI Setup">
+		<p>Here we describe setup and interaction with the asterisk dialplan.
+		</p>
+	
+			<subsection name="Classpath">
+				<p>You need at least the these jars in your classpath:</p>
+				<ul>
+				<li>asterisk-jtapi-<i>&lt;version></i>.jar</li>
+				<li>gjtapi-<i>&lt;version></i>.jar</li>
+				<li>asterisk-java-<i>&lt;version></i>.jar</li>
+				<li>jtapi-1.3.1.jar</li>
+				</ul>
+				<p><b>The Asterisk-JTAPI jar-file must be before the GJTAPI jar in the classpath.</b></p>
+			</subsection>
+		
+			<subsection name="Client Setup / Provider Parameters">
+			<p>You retrieve the Asterisk JTAPI provider by issueing
+			  <code>JtapiPeer.getProvider("Asterisk; <i>parameters</i>");</code> where parameters
+			  are in the form <code>name=value; name=value; ...</code>. Supported parameters
+			  are:
+			</p>
+			<ul>
+			<li><b><code>Server</code></b> IP address or hostname of your Asterisk box</li>
+			<li><b><code>Port</code></b> Port number of the Manager Interface</li>
+			<li><b><code>Login</code></b> manager login user</li>
+			<li><b><code>Password</code></b> Secret for the asterisk manager login</li>
+			<li><b><code>IncomingContext</code></b> Context of incoming calls, see Dialplan section below</li>
+			<li><b><code>TerminalContext</code></b> Context of terminal, see Dialplan section below</li>
+			<li><b><code>OutgoingContext</code></b> Context of outgoing calls, see Dialplan section below</li>
+			</ul>
+			</subsection>
+			<subsection name="Asterisk PBX Setup">
+			<p>To setup the manager interface in your Asterisk PBX check the configuration file 
+			  <code>/etc/asterisk/manager.conf</code>
+			</p>
+			</subsection>
+			<subsection name="Dialplan Setup">
+			<p>The JTAPI standard allows an application to retrieve information about the addresses 
+			    and terminals under control and their actual state.
+			    To avoid doubled configuration work we construct this information by analysing 
+			    the Asterisk dialplan.
+			</p>
+			<p>	Before we go into detail some definitions from the JTAPI and Asterisk "worlds":
+			</p>
+			<ul>
+			<li><b>address</b> Defined by JTAPI, this is a number that is dialed, which is the routing 
+				information in a telecommunications network.</li>
+			<li><b>terminal</b> Defined by JTAPI, this is a communications endpoint, e.g. a telephone or
+				a fax machine. A terminal may be reachable through several addresses (we call this <b>alias</b>)
+				and an address may have several terminals assigned e.g. for a group call.
+			</li>
+			<li><b>context</b> Defined by Asterisk; Call routing starts in different contexts to seperate
+				different issues, e.g. incoming/outgoing calls, calls from different trunk lines.
+			</li>
+			<li><b>extension</b> Defined by Asterisk; A target in the dialplan. An extension has a name,
+			   	number or a number wildcard match and executes commands if its number/name is dialed. 
+			   	The idea of an extension is more generic then a terminal. An extension a phone, voicemail box,
+			   	meetme room, an alias for another extension, etc.</li>
+			<li><b>extension id</b> The dialed extension name or number.</li>
+			</ul>
+			<p>For a starting point about the Asterisk dialplan options and commands take a look at 
+			<a href="http://www.voip-info.org/wiki/view/Asterisk+howto+dial+plan">Asterisk howto dial plan</a>
+			</p>
+			<subsection name="From Extensions to Terminals">
+			<p>There are many different ways to construct an Asterisk dialplan. Let's start with an example: 
+			   We have a trunk line with two digits direct dial in numbers. 
+			   A straight-forward dialplan looks like this:
+			</p>
+			<source>
+[dialin]
+; telephone from jens routed to internal ISDN 
+exten => 30,1,Dial(Zap/g2/30)
+; telephone from birgit routed to her SIP phone
+exten => 31,1,Dial(SIP/birgit,30,r)
+; hotline calls go to birgit
+exten => 24,1,Goto(31,1)
+			</source>
+			<p>As we can see the extension ids 30 and 31 are routed to some endpoints and number 24 is
+			   just an alias of 31.
+			</p>
+			<p>Asterisk JTAPI transfers such a dialplan automatically to meaningfull JTAPI objects:
+			   We get two terminals named 30 and 31. Terminal 31 has the address 31 and 24 and terminal
+			   30 has just the address 30. To use this kind of dialplan set incomingContext and terminalContext
+			   to the same value (in the above example this is "dialin").
+			</p>
+			<p>It is best practise to seperate terminals from the routing either by using a special number
+			   space or a different context for the terminals:
+			</p>
+			<source>
+[terminals]
+; telephone from jens routed to internal ISDN 
+exten => jens,1,Dial(Zap/g2/30)
+; telephone from birgit routed to her SIP phone
+exten => birgit,1,Dial(SIP/birgit,30,r)
+
+[dialin]
+exten => 30,1,Goto(terminals,jens,1)
+exten => 31,1,Goto(terminals,birgit,1)
+; hotline calls go to birgit
+exten => 24,1,Goto(terminals,birgit,1)
+			</source>
+			<p>Defined this way JTAPI application get two terminals named "jens" and "birgit". Terminal
+			   "jens" has the assigned address 30 and terminal "birgit" has the assigned address 31 and 24.
+			   In the Asterisk JTAPI configuration inscomingContext needs to be set to dialin and terminalContext
+			   needs to be set to terminals.
+			</p>
+			</subsection>
+			<subsection name="Dialplan Analysing">
+			<p> Now that we saw two example dialplans, lets define how the translation from dialplan to JTAPI object model is done. 
+			   The dialplan is parsed and the JTAPI object model is constructed according to the following rules:</p>
+			<ul> 
+			<li>Each extension in the terminal context becomes a JTAPI terminal. The terminal name is the extension id</li>
+			<li>If the terminal context is also the incoming context the extension id of a terminal is also an address of 
+			    that terminal
+			</li>
+			<li>If incoming and terminal context is identical and an extension is a recognized routing 
+			    command it is excluded from the terminal list
+			</li>
+			</ul>
+			<p>Routing commands that we recognize so far:</p>
+			<ul>
+			<li><b>Goto</b> A Goto at priority 1 in the incoming context to a terminal target: The extension id is added
+			    to the terminal address (alias definition)
+			</li>
+			<li><b>Dial</b> A Dial at priority 1 in the incoming context to multiple local targets: If the target is a 
+				terminal the extension id is added to the terminal address (alias or group call)
+			</li>
+			</ul>
+			</subsection>
+			</subsection>
+		</section>
+	</body>
+</document>

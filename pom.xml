@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.headissue</groupId>
+  <artifactId>asterisk-jtapi</artifactId>
+  <packaging>jar</packaging>
+  <version>0.3-pre-060808</version>
+  <name>Asterisk JTAPI</name>
+  <url>http://asterisk-jtapi.sf.net</url>
+  <organization>
+    <name>headissue GmbH</name>
+    <url>http://www.headissue.com/</url>
+  </organization>
+    <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <distributionManagement>
+    <site>
+      <id>sourceforge</id>
+      <url>scp://shell.sourceforge.net/home/groups/a/as/asterisk-jtapi/htdocs</url>
+    </site>
+  </distributionManagement>
+  <scm>
+    <connection>scm:cvs:pserver:anonymous@asterisk-jtapi.cvs.sourceforge.net:/cvsroot/asterisk-jtapi:asterisk-jtapi</connection>
+	<developerConnection>scm:cvs:ext:${maven.username}@asterisk-jtapi.cvs.sourceforge.net:/cvsroot/asterisk-jtapi:asterisk-jtapi</developerConnection>
+    <url>http://cvs.sourceforge.net/viewcvs.py/asterisk-jtapi/asterisk-jtapi/</url>
+  </scm>
+  <reporting>
+  	<plugins>
+    	<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>jxr-maven-plugin</artifactId>
+            <version>2.0-beta-1</version>
+    	</plugin>
+    	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.0-beta-3</version>
+    	</plugin>
+     </plugins>
+  </reporting>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <locales>en</locales>
+        </configuration>
+      </plugin>
+    </plugins>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
+    <finalName>${artifactId}-${version}</finalName>
+    <testOutputDirectory>target/test-classes</testOutputDirectory>
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/junit</testSourceDirectory>
+  </build>
+  <mailingLists>
+    <mailingList>
+      <name>Asterisk JTAPI Users</name>
+      <subscribe>https://lists.sourceforge.net/mailman/listinfo/asterisk-jtapi-users</subscribe>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_id=47526</archive>
+    </mailingList>
+    <mailingList>
+      <name>GJTAPI Developers Mailing List</name>
+      <subscribe>https://lists.sourceforge.net/mailman/listinfo/gjtapi-developers</subscribe>
+      <archive>https://sourceforge.net/mailarchive/forum.php?forum_id=8361</archive>
+    </mailingList>
+    <mailingList>
+      <name>JTAPI-INTEREST@JAVA.SUN.COM: General Discussion about the Java Telephony API</name>
+      <subscribe>http://archives.java.sun.com/cgi-bin/wa?SUBED1=jtapi-interest&amp;A=1</subscribe>
+      <archive>http://archives.java.sun.com/cgi-bin/wa?A0=JTAPI-INTEREST</archive>
+    </mailingList>
+    
+  </mailingLists>
+  <developers>
+    <developer>
+      <name>Jens Wilke</name>
+      <id>jwilke</id>
+      <email>jw0_gjtapi at headissue.com</email>
+      <timezone>+1</timezone>
+      <organization>headissue GmbH</organization>
+      <organizationUrl>http://www.headissue.com</organizationUrl>
+    </developer>
+  </developers>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>asterisk-java</groupId>
+      <artifactId>asterisk-java</artifactId>
+      <version>0.2</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>gjtapi</groupId>
+   	  <artifactId>gjtapi</artifactId>
+      <version>1.8</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>javax.telephony</groupId>
+   	  <artifactId>jtapi</artifactId>
+      <version>1.3.1</version>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+</project>

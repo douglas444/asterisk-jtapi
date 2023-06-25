@@ -1,0 +1,28 @@
+8 aug 2006; jw: patch from Martin Sladecek
+	* Allow more then one context to be specified for terminalContext and
+	  incomingContext. The internal list of contexts is expended, so JTAPI
+	  will recognize all contexts that include the given contexts.
+	  This change is for AMP, which uses multiple contexts for terminals and
+	  multiple include stages.
+
+15 may 2006; jw
+	* Calls originated over JTAPI are reported
+	* Tests with Asterisk 1.2.4
+	* Documentation: Introduction to JTAPI
+	* Release 0.2
+	* Use with CVS snapshot build of GJTAPI
+	  gjtapi-060515
+
+20 feb 2006; jw
+	* CallControlCall getCalledAddress / getCallingAddress working for incoming calls
+	  (GJTAPI fix)
+	* Converted build system to maven 2
+
+26 dec 2005; jw
+    * Fixed dialplan parsing bug [sf-1340535] and added handling for dialplan includes
+    * The building/parsing of the dialplan is now pluggable, config variable dialplanBuilder
+    * Tests with Asterisk 1.2.1
+
+
+Asterisk-JTAPI 0.1
+	* Initial release 0.1

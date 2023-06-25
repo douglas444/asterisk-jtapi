@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Asterisk JTAPI">
+  <bannerLeft>
+    <name>headissue</name>
+    <src>http://www2.headissue.com/fileadmin/template/pic/headissue.png</src>
+    <href>http://www.headissue.com</href>
+  </bannerLeft>
+  <body>
+    <links>
+      <item name="Asterisk JTAPI - Sourceforge Project Page" href="http://sourceforge.net/projects/asterisk-jtapi" />
+    </links>
+    <menu name="Asterisk JTAPI">
+      	<item name="Overview" href="index.html"/>
+      	<item name="JTAPI Intro" href="jtapi.html"/>
+      	<item name="Setup" href="setup.html"/>
+      	<item name="Build" href="building.html"/>
+      	<item name="Project Information" href="project-info.html"/>
+    </menu>
+    ${reports}
+    <search/>
+	<menu name="Footer" type="footer">
+		<item name="Hosting by SourceForge" 
+			href="http://sourceforge.net" 
+			img="http://sourceforge.net/sflogo.php?group_id=118998&amp;type=2" />
+	</menu>
+  </body>
+</project>

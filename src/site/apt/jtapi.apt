@@ -1,0 +1,93 @@
+~~ (C) Copyright headissue GmbH 2006; Jens Wilke
+~~
+~~  Licensed under the Apache License, Version 2.0 (the "License");
+~~  you may not use this file except in compliance with the License.
+~~  You may obtain a copy of the License at
+~~
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing, software
+~~  distributed under the License is distributed on an "AS IS" BASIS,
+~~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~  See the License for the specific language governing permissions and
+~~  limitations under the License.
+
+  -------------------------------
+  Java Telephony API Introduction
+  -------------------------------
+  Jens Wilke
+  -------------------------------
+  3rd May 2006
+
+Java Telephony API Introduction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Overview
+~~~~~~~~~~
+
+  JTAPI is an object-oriented interface that represents an uniform abstraction model 
+  for telephony applications. JTAPI implementations are available for all major 
+  PBX systems, therefore telephone applications can be made portable.
+  
+  The object and event model can be used to control just a single telephone 
+  (known as first party interface) or a complete PBX (third party interface). 
+  The API consists of a core package and has various extensions, e. g. for 
+  call control and call centers. The mobile extension provides features 
+  such as returning the available networks, which is used for applications 
+  running on Java enabled mobile phones.
+  
+* Objects and States
+~~~~~~~~~~~~~~~~~~~~
+  
+  A communication session in JTAPI is modeled using the Call object.
+  A Call can contain many participating parties. Each party gets its own 
+  Connection object associated with the call representing one leg. 
+  Each Connection has an associated Address, that is the telephone number 
+  of the call originator or receiver. Terminals represent communication devices. 
+  An association between a Connection and a Terminal is modeled with the 
+  TerminalConnection object. An incoming phone call may ring at three Terminals, 
+  so three TerminalConnections will be generated to represent this. After 
+  one Terminal has answered, only one TerminalConnection will be left - the 
+  others will have entered the dropped state and left the call. 
+  Call, Connection and TerminalConnection objects are created dynamically. 
+
+[images/jtapiObjectModelWeb.png] JTAPI Object Model
+
+  The Terminal and Address objects represent the static setup. The association 
+  between them is a many to many relationship. An address may be assigned 
+  to many terminals (group-call) and a terminal may be assigned to many 
+  addresses (aliasing).
+  
+  The Provider object is used to retrieve the terminals, addresses and 
+  to register event listeners. It is also possible to retrieve all active Calls.
+  
+[images/connectionStates.png] Finite state machine of a Connection object.
+  
+  Each has a finite state machine (FSM) to define its state in the telephony 
+  session. The figure above an example of the Connection object FSM. 
+  Whenever a new state is entered, an event is generated for the application.
+  Here is an example for initiating a call in JTAPI:
+
++--
+ Terminal terminal =
+  provider.getTerminal("jens_desk");
+ Address addr = 
+  provider.getAddress("34");
+ Call call = provider.createCall();
+ call.connect(_terminal, _addr, 
+              "0049898976890");
++--              
+              
+  We can also use the first associated address to the terminal, instead of setting it directly:
+  
++--
+ Address addr =
+   terminal.getAddresses()[0];			
++--
+
+* Further Information
+
+ * {{{http://java.sun.com/products/jtapi/} JTAPI home page at Sun}}
+ 
+ * {{{http://www.zurich.ibm.com/csc/distribsys/j323/j323-8.html} Intro paper and links at IBM (slightly outdated)}}
+ 

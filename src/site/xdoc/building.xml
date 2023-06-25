@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/*
+ *  (C) Copyright 2005-2006 headissue GmbH; Jens Wilke
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+-->
+<document>
+	<properties>
+		<author>Jens Wilke</author>
+		<title>Asterisk-JTAPI Build Notes</title>
+	</properties>
+	<meta name="keywords" content="Asterisk-JTAPI, setup, configuration"/>
+	<body>
+		<section name="Asterisk-JTAPI Build Notes">
+		<p>This note describes how to build a project jar file.
+		</p>
+			<subsection name="Prerequisites">
+			<p>You need <a href="http://maven.apache.org/maven2"><b>maven 2</b></a> for the build. Please note that the version numbers
+			   may be out of date in this document. 
+			   Please take a look at the <a href="dependencies.html">generated dependencies information</a> page.
+			</p>
+			</subsection>
+			<subsection name="Install Needed Jars">
+			<p>The needed 3rd party jars are not in a maven repository, so you have to install them manually.
+			</p>
+<p><b>gjtapi:</b>
+<code>
+mvn install:install-file -Dfile=gjtapi-1.8.jar -DgroupId=gjtapi -DartifactId=gjtapi -Dversion=1.8 -Dpackaging=jar
+</code>
+</p>
+<p><b>jtapi:</b>
+<code>
+mvn install:install-file -Dfile=jtapi-1.3.1.jar -DgroupId=javax.telephony -DartifactId=jtapi -Dversion=1.3.1 -Dpackaging=jar
+</code>
+</p>
+<p><b>asterisk-java:</b>
+<code>
+mvn install:install-file -Dfile=asterisk-java-0.2.jar -DgroupId=asterisk-java -DartifactId=asterisk-java -Dversion=0.2 -Dpackaging=jar
+</code>
+</p>
+			</subsection>
+			<subsection name="Build the Jar File">
+			<p>Run <code>mvn jar</code> to build the jar file from the source.</p>
+			</subsection>
+		</section>
+	</body>
+</document>
